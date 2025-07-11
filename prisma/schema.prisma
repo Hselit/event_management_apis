@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id       String @id @default(uuid())
+  username String @unique
+  role     String
+  password String
+}
+
+model Event {
+  id            String          @id @default(uuid())
+  title         String
+  description   String?
+  date          DateTime
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  venueId       String          @unique
+  EventAttendee EventAttendee[]
+  Venue         Venue           @relation(fields: [venueId], references: [id])
+}
+
+model Venue {
+  id       String @id @default(uuid())
+  name     String
+  address  String
+  capacity Int
+  Event    Event?
+}
+
+model Attendee {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  registeredAt DateTime @default(now())
+
+  eventAttendee EventAttendee[]
+}
+
+model EventAttendee {
+  id           String   @id @default(uuid())
+  eventId      String
+  event        Event    @relation(fields: [eventId], references: [id])
+  attendeeId   String
+  registeredAt DateTime @default(now())
+
+  Attendee Attendee @relation(fields: [attendeeId], references: [id])
+}

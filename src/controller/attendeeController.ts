@@ -1,0 +1,32 @@
+import { Request, Response } from "express";
+import { AttendeeService } from "../services/attendeeService";
+import { addAttendeeRequest, addAttendeeResponse, getAttendeesResponse } from "../dto/attendee.dto";
+
+export const getAllAttendee = async (req: Request, res: Response) => {
+  try {
+    const attendeeList: getAttendeesResponse = await AttendeeService.getAllAttendee();
+    if (!attendeeList || attendeeList.length == 0) {
+      res.status(404).json({ message: "No Attendee Found" });
+      return;
+    }
+    res.status(200).json({ message: "Attendee Fetched Successfully", attendeeData: attendeeList });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Error", error: error });
+  }
+};
+
+export const addAttendee = async (req: Request, res: Response) => {
+  try {
+    const attendeeBodyData: addAttendeeRequest = req.body;
+    const createdattendee: addAttendeeResponse = await AttendeeService.addAttendee(
+      attendeeBodyData
+    );
+    res
+      .status(201)
+      .json({ message: "Attendee Created Successfully", createdattendee: createdattendee });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error", error: error });
+  }
+};
