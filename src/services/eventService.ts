@@ -110,8 +110,8 @@ export class EventService {
   static async getAttendeesByEventId(eventId: string) {
     try {
       let resultData: any = {};
-      const eventDetails = await prisma.eventAttendee.findUnique({
-        where: { id: eventId },
+      const eventDetails = await prisma.eventAttendee.findMany({
+        where: { eventId: eventId },
         select: {
           Attendee: {
             select: {
@@ -125,14 +125,29 @@ export class EventService {
       if (!eventDetails) {
         return "No Event Found with the Id";
       }
-      resultData = { ...eventDetails };
+      const attendeeList = eventDetails.map((a) => a.Attendee);
+      // console.log(eventDetails);
       const totalAttendeesCount = await prisma.eventAttendee.count({
         where: { eventId: eventId },
       });
       resultData.totalCount = totalAttendeesCount;
+      resultData.attendees = attendeeList;
       // Map to flatten out Attendee from wrapper object
       // const formatted = eventDetails.map((ea) => ea.Attendee)
       return resultData;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getEventWithLimits(page: number, limit: number) {
+    try {
+      const offset = (page - 1) * limit;
+      const eventData = await prisma.event.findMany({
+        skip: offset,
+        take: limit,
+      });
+      return eventData;
     } catch (error) {
       throw error;
     }

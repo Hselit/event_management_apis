@@ -1,13 +1,8 @@
 import { Request, Response } from "express";
 import { VenueService } from "../services/venueService";
-import {
-  addVenueRequest,
-  addVenueResponse,
-  getVenueResponse,
-  getVenuesResponse,
-} from "../dto/venue.dto";
+import { addVenueRequest, addVenueResponse, getVenueResponse, getVenuesResponse } from "../dto/venue.dto";
 
-export const getAllVenueList = async (req: Request, res: Response) => {
+export const getAllVenueList = async (req: Request, res: Response): Promise<void> => {
   try {
     const venueList: getVenuesResponse = await VenueService.getAllVenue();
     if (!venueList || venueList.length == 0) {

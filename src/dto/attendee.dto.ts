@@ -5,6 +5,10 @@ export type addAttendeeResponse = {
   registeredAt: Date;
 };
 
-export type addAttendeeRequest = Pick<addAttendeeResponse, "name" | "email" | "registeredAt">;
+export type addAttendeeRequest = Pick<addAttendeeResponse, "name" | "email">;
 
 export type getAttendeesResponse = addAttendeeResponse[];
+
+export type eventAttendeeResponse = {
+  attendee: addAttendeeResponse[];
+};

@@ -12,6 +12,8 @@ export type addEventResponse = string | eventResponse;
 
 export type addEventRequest = Pick<eventResponse, "date" | "title" | "description" | "venueId">;
 
+export type updateEventRequest = Partial<addEventRequest>;
+
 export type getEventsResponse = eventResponse[];
 
 export type getEventResponse = eventResponse | null;

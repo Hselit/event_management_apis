@@ -19,12 +19,27 @@ export const getAllAttendee = async (req: Request, res: Response) => {
 export const addAttendee = async (req: Request, res: Response) => {
   try {
     const attendeeBodyData: addAttendeeRequest = req.body;
-    const createdattendee: addAttendeeResponse = await AttendeeService.addAttendee(
-      attendeeBodyData
-    );
-    res
-      .status(201)
-      .json({ message: "Attendee Created Successfully", createdattendee: createdattendee });
+    const createdattendee: addAttendeeResponse = await AttendeeService.addAttendee(attendeeBodyData);
+    res.status(201).json({ message: "Attendee Created Successfully", createdattendee: createdattendee });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error", error: error });
+  }
+};
+
+export const exportAttendees = async (req: Request, res: Response) => {
+  try {
+    const attendeeList = await AttendeeService.getAllAttendee();
+
+    if (!attendeeList || attendeeList.length === 0) {
+      return res.status(404).json({ message: "No Students Found to Export" });
+    }
+
+    const csv = await AttendeeService.parseAttendee(attendeeList);
+    res.header("Content-Type", "text/csv");
+    res.attachment("attendee.csv");
+
+    res.send(csv);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error", error: error });
