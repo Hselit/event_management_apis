@@ -96,10 +96,10 @@ export const getEventAttendees = async (req: Request, res: Response) => {
 
 export const getEventByPage = async (req: Request, res: Response) => {
   try {
-    const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 0;
+    const page: number = parseInt(req.query.page as string) || 1;
+    const limit: number = parseInt(req.query.limit as string) || 0;
 
-    const eventData = await EventService.getEventWithLimits(page, limit);
+    const eventData: getEventsResponse = await EventService.getEventWithLimits(page, limit);
     if (!eventData || eventData.length == 0) {
       res.status(404).json({ message: "No Events Found" });
     }

@@ -1,0 +1,18 @@
+<html>
+  <%- include("./partials/header.ejs") %>
+  <body>
+    <%- include("./partials/navbar.ejs") %>
+
+    <div style="text-align: center; margin: auto">
+      <h4>Login Form</h4>
+      <form action="/api/v1/user/loginuser" method="post">
+        <label for="username"><b>Enter Your Username : </b></label>
+        <input type="text" name="username" id="username" placeholder="username" /><br />
+        <label for="password"><b>Enter your Password : </b></label>
+        <input type="password" name="password" placeholder="password" id="password" /><br /><br />
+        <button type="submit">Login</button>&nbsp;&nbsp;
+        <button type="reset">Reset</button>
+      </form>
+    </div>
+  </body>
+</html>

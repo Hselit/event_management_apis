@@ -12,3 +12,10 @@ export type getAttendeesResponse = addAttendeeResponse[];
 export type eventAttendeeResponse = {
   attendee: addAttendeeResponse[];
 };
+
+export type getAttendeeDetails = Omit<addAttendeeResponse, "id">[];
+
+export type getEventAttendeeResponse = {
+  totalCount: number;
+  attendee: Omit<addAttendeeResponse, "id">[];
+};

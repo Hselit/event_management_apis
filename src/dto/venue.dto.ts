@@ -10,3 +10,7 @@ export type addVenueRequest = Omit<addVenueResponse, "id">;
 export type getVenuesResponse = addVenueResponse[];
 
 export type getVenueResponse = addVenueResponse | string;
+
+export type checkVenueResponse = string | null;
+
+export type getVenueReponse = addVenueResponse | null;

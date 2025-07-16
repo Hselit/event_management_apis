@@ -29,13 +29,13 @@ export const addAttendee = async (req: Request, res: Response) => {
 
 export const exportAttendees = async (req: Request, res: Response) => {
   try {
-    const attendeeList = await AttendeeService.getAllAttendee();
+    const attendeeList: getAttendeesResponse = await AttendeeService.getAllAttendee();
 
     if (!attendeeList || attendeeList.length === 0) {
       return res.status(404).json({ message: "No Students Found to Export" });
     }
 
-    const csv = await AttendeeService.parseAttendee(attendeeList);
+    const csv: string = await AttendeeService.parseAttendee(attendeeList);
     res.header("Content-Type", "text/csv");
     res.attachment("attendee.csv");
 

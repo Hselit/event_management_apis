@@ -1,11 +1,16 @@
+import { getUserResponse, userBaseResponse, userListResponse, userRequest, userResponse } from "../dto/user.dto";
 import { ecryptPassword, generateToken, verifyPassword } from "../middleware/loginMiddleware";
 import { prisma } from "../utils/prisma";
 
 export class UserService {
-  static async addUser(userdata: any) {
+  static async addUser(userdata: userRequest) {
     try {
-      const hashedpass = await ecryptPassword(userdata.password);
-      const createdUser = await prisma.user.create({
+      const isUserExist: userResponse = await UserService.getUserbyUsername(userdata);
+      if (!isUserExist) {
+        return "Username Already Exists";
+      }
+      const hashedpass: string = await ecryptPassword(userdata.password);
+      const createdUser: userBaseResponse = await prisma.user.create({
         data: {
           username: userdata.username,
           password: hashedpass,
@@ -18,9 +23,9 @@ export class UserService {
     }
   }
 
-  static async getUserbyUsername(logindata: any) {
+  static async getUserbyUsername(logindata: userRequest) {
     try {
-      const userdata = await prisma.user.findUnique({ where: { username: logindata.username } });
+      const userdata: getUserResponse = await prisma.user.findUnique({ where: { username: logindata.username } });
       if (!userdata) {
         return "No User Found with the Username";
       }
@@ -32,7 +37,7 @@ export class UserService {
 
   static async getAllUsers() {
     try {
-      const usersList = await prisma.user.findMany();
+      const usersList: userListResponse = await prisma.user.findMany();
       if (!usersList) {
         return "No User Found";
       }
@@ -42,17 +47,17 @@ export class UserService {
     }
   }
 
-  static async loginUser(logindata: any) {
+  static async loginUser(logindata: userRequest) {
     try {
-      const isUserExist = await UserService.getUserbyUsername(logindata);
+      const isUserExist: userResponse = await UserService.getUserbyUsername(logindata);
       if (typeof isUserExist == "string") {
         return isUserExist;
       }
-      const checkpassword = await verifyPassword(logindata.password, isUserExist.password);
+      const checkpassword: boolean = await verifyPassword(logindata.password, isUserExist.password);
       if (!checkpassword) {
         return "Invalid Password";
       }
-      const token = await generateToken(logindata.username, isUserExist.role);
+      const token: string = await generateToken(logindata.username, isUserExist.role);
       return token;
     } catch (error) {
       throw error;
