@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AttendeeService } from "../services/attendeeService";
-import { addAttendeeRequest, addAttendeeResponse, getAttendeesResponse } from "../dto/attendee.dto";
+import { addAttendeeRequest, addAttendeeRes, addAttendeeResponse, getAttendeesResponse } from "../dto/attendee.dto";
 
 export const getAllAttendee = async (req: Request, res: Response) => {
   try {
@@ -19,7 +19,11 @@ export const getAllAttendee = async (req: Request, res: Response) => {
 export const addAttendee = async (req: Request, res: Response) => {
   try {
     const attendeeBodyData: addAttendeeRequest = req.body;
-    const createdattendee: addAttendeeResponse = await AttendeeService.addAttendee(attendeeBodyData);
+    const createdattendee: addAttendeeRes = await AttendeeService.addAttendee(attendeeBodyData);
+    if (createdattendee == "Attendee Already present with the Email") {
+      res.status(400).json({ message: createdattendee });
+      return;
+    }
     res.status(201).json({ message: "Attendee Created Successfully", createdattendee: createdattendee });
   } catch (error) {
     console.error(error);

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { EventService } from "../services/eventService";
 import { addEventRequest, addEventResponse, getEventResponse, getEventsResponse, updateEventRequest } from "../dto/event.dto";
-import { addAttendeeRequest, eventAttendeeResponse } from "../dto/attendee.dto";
+import { addAttendeeRequest, getEventAttResponse } from "../dto/attendee.dto";
 
 export const getAllEventList = async (req: Request, res: Response) => {
   try {
@@ -44,7 +44,11 @@ export const deleteEvent = async (req: Request, res: Response) => {
   try {
     const eventId: string = req.params.id;
     const deletedEvent: string = await EventService.deleteEvent(eventId);
-    res.status(201).json({ message: "Event Created Successfully", deletedEvent: deletedEvent });
+    if (deletedEvent == "No Event Found with the Id") {
+      res.status(404).json({ message: deletedEvent });
+      return;
+    }
+    res.status(201).json({ message: deletedEvent });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error", error: error });
@@ -83,7 +87,7 @@ export const registerAttendee = async (req: Request, res: Response) => {
 export const getEventAttendees = async (req: Request, res: Response) => {
   try {
     const eventId: string = req.params.id;
-    const eventAttendeesList: eventAttendeeResponse = await EventService.getAttendeesByEventId(eventId);
+    const eventAttendeesList: getEventAttResponse = await EventService.getAttendeesByEventId(eventId);
     if (!eventAttendeesList) {
       res.status(404).json({ message: "No Attendees Found" });
     }

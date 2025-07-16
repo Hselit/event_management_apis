@@ -1,3 +1,5 @@
+import { addAttendeeResponse } from "./attendee.dto";
+
 export type eventResponse = {
   id: string;
   title: string;
@@ -18,4 +20,6 @@ export type getEventsResponse = eventResponse[];
 
 export type getEventResponse = eventResponse | null;
 
-export type registerAttendeeResponse = {};
+export type getEventAttendees = {
+  Attendee: Omit<addAttendeeResponse, "id">;
+}[];

@@ -1,6 +1,6 @@
 import { prisma } from "../utils/prisma";
 import { VenueService } from "./venueService";
-import { addEventRequest, addEventResponse, eventResponse, getEventResponse, getEventsResponse, updateEventRequest } from "../dto/event.dto";
+import { addEventRequest, addEventResponse, eventResponse, getEventAttendees, getEventResponse, getEventsResponse, updateEventRequest } from "../dto/event.dto";
 import { checkVenueResponse, getVenueResponse } from "../dto/venue.dto";
 import { addAttendeeRequest, addAttendeeResponse, getAttendeeDetails, getAttendeesResponse, getEventAttendeeResponse } from "../dto/attendee.dto";
 
@@ -109,7 +109,7 @@ export class EventService {
 
   static async getAttendeesByEventId(eventId: string) {
     try {
-      const eventDetails = await prisma.eventAttendee.findMany({
+      const eventDetails: getEventAttendees = await prisma.eventAttendee.findMany({
         where: { eventId: eventId },
         select: {
           Attendee: {

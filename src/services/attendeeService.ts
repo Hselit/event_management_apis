@@ -1,6 +1,6 @@
 import { Parser } from "json2csv";
 import { prisma } from "../utils/prisma";
-import { addAttendeeRequest, addAttendeeResponse, getAttendeesResponse } from "../dto/attendee.dto";
+import { addAttendeeRequest, addAttendeeRes, addAttendeeResponse, getAttendeeResponse, getAttendeesResponse } from "../dto/attendee.dto";
 
 export class AttendeeService {
   static async getAllAttendee() {
@@ -14,8 +14,24 @@ export class AttendeeService {
 
   static async addAttendee(attendeeData: addAttendeeRequest) {
     try {
+      const checkAttendee: addAttendeeRes = await AttendeeService.getAttendeeByEmail(attendeeData.email);
+      if (typeof checkAttendee !== "string") {
+        return "Attendee Already present with the Email";
+      }
       const createdAttendee: addAttendeeResponse = await prisma.attendee.create({ data: attendeeData });
       return createdAttendee;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getAttendeeByEmail(attendeeEmail: string) {
+    try {
+      const attendeeDetail: getAttendeeResponse = await prisma.attendee.findUnique({ where: { email: attendeeEmail } });
+      if (!attendeeDetail) {
+        return "No Attendee Found With this Email";
+      }
+      return attendeeDetail;
     } catch (error) {
       throw error;
     }

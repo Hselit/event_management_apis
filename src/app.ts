@@ -26,7 +26,7 @@ app.use("/api/v1/venue", venueRoutes);
 app.use("/api/v1/user", userRoutes);
 
 app.use("/", (req, res) => {
-  res.render("home");
+  res.render("dash");
 });
 
 // app.use((req, res) => {

@@ -6,7 +6,7 @@ export class UserService {
   static async addUser(userdata: userRequest) {
     try {
       const isUserExist: userResponse = await UserService.getUserbyUsername(userdata);
-      if (!isUserExist) {
+      if (typeof isUserExist !== "string") {
         return "Username Already Exists";
       }
       const hashedpass: string = await ecryptPassword(userdata.password);

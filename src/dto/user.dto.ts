@@ -3,12 +3,7 @@ export type userRequest = {
   password: string;
 };
 
-export type userResponse =
-  | (userRequest & {
-      role: string;
-      id: string;
-    })
-  | string;
+export type userResponse = userBaseResponse | string;
 
 export type userBaseResponse = {
   username: string;
