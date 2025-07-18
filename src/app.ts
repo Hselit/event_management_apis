@@ -5,6 +5,9 @@ import attendeeRoutes from "./routes/attendeeRoutes";
 import venueRoutes from "./routes/venueRoutes";
 import userRoutes from "./routes/userRoutes";
 
+import { openApiDocument } from "./docs/swagger";
+import swaggerUi from "swagger-ui-express";
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,6 +22,8 @@ app.use("/login", (req, res) => {
 app.use("/register", (req, res) => {
   res.render("register");
 });
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
 
 app.use("/api/v1/event", eventRoutes);
 app.use("/api/v1/attendee", attendeeRoutes);
