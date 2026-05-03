@@ -3,7 +3,7 @@
 A secure REST API for managing events, venues, and attendees, built with Node.js, Express.js, Prisma (MySQL), JWT authentication, role-based access, Zod validation, CSV export, and Swagger documentation.
 
 Event Management overview
-
+![Event Management overview](assets/Event-Management.png)
 
 **Hosted API reference (Fern):** Documentation derived from the Postman collection is published with [Fern](https://buildwithfern.com). Example endpoint page: [Register User](https://backend-543914.docs.buildwithfern.com/event-management/user/register-user).
 
